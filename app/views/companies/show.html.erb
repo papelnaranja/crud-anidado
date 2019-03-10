@@ -1,0 +1,62 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @company.name %>
+</p>
+<%# [ @company, @employee] ... se envia al controlador de company el Emeployee.new por eso se coloca @employee%>
+<%= form_with(model:[ @company, @employee], local: true) do |form| %>
+  <div class="field">
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :email %>
+    <%= form.email_field :email %>
+  </div>
+
+ <div class="field">
+    <%# form.select :area_id, ['hola','chao','adios'] %>
+    <%# pluck(:name, :id) regresa un [['diseño, 1],['qa', 2]] %>
+    <%= form.select :area_id, @select_area %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit 'Enviar' %>
+  </div>
+
+
+<% end %>
+
+<table>
+  <thead>
+  <tr>
+    <th>Nombre</th>
+    <th>Apellido</th>
+    <th>Email</th>
+    <th>Área</th>
+    <th>Acción</th>
+  </tr>
+  </thead>
+  <tbody>
+  <%# ya que existe el has_many se puede usar el metodod employees  %>
+  <% @company.employees.each do |e|  %>
+    <tr>
+      <td> <%= e.first_name  %></td>
+      <td> <%= e.last_name  %></td>
+      <td> <%= e.email  %></td>
+      <td> <%= e.area.name  %></td>
+      <td><%= link_to 'Borrar', company_employee_path(@company, e), method: :delete %></td>
+    </tr>
+  <% end %>
+
+  </tbody>  
+</table>
+<%= link_to 'Edit', edit_company_path(@company) %> |
+<%= link_to 'Back', companies_path %>
